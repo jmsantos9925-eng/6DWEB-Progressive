@@ -1,53 +1,52 @@
 <?php
+$title = 'Variables & Arrays';
 $name = 'Jem';
 $price = '999';
 $nutrition = [
-    'fat' => 15,
-    'sugar' => 60,
-    'salt' => 7.1,
+    'Fat' => 15,
+    'Sugar' => 60,
+    'Salt' => 7.1
 ];
-
-$nutrition['fat'] = 50;
-$nutrition['fiber'] = 50;
-
-$bestsellers = ['Chocolate', 'Mints', 'Fudge', 'Bubble gum', 'Toffee', 'Jelly Beans',];
-
+$nutrition['Fat'] = 50;
+$nutrition['Fiber'] = 50;
+$bestsellers = ['Chocolate', 'Mints', 'Fudge', 'Bubble gum', 'Toffee', 'Jelly Beans'];
 $offers = [
-    ['name' => 'Toffee', 'price' => 17, 'stock' => 120,],
-    ['name' => 'Mints', 'price' => 20, 'stock' => 66,],
-    ['name' => 'Fudge', 'price' => 30, 'stock' => 155,],
+    ['name' => 'Toffee', 'price' => 17, 'stock' => 120],
+    ['name' => 'Mints', 'price' => 20, 'stock' => 66],
+    ['name' => 'Fudge', 'price' => 30, 'stock' => 155]
 ];
+$total_stock = 0;
+
+require 'includes/header.php';
 ?>
-
-
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Variables & Arrays</title>
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-    <h1>The Candy Store</h1>
-    <h2>Welcome <?php echo $name; ?></h2>
-    <p>The cost of your candy is $<?php echo $price; ?> per pack.</p>
-
+    <h2>Welcome <?= $name ?></h2>
+    <p>The cost of your candy is $<?= $price ?> per pack.</p>
     <h2>Nutrition (per 100g)</h2>
-
-    <p>Fat: <?php echo $nutrition['fat'];?></p>
-    <p>Sugar: <?php echo $nutrition['sugar'];?></p>
-    <p>Salt: <?php echo $nutrition['salt'];?></p>
-    <p>Fiber: <?php echo $nutrition['fiber'];?></p>
-
-    <ul>
-        <li><?php echo $bestsellers[0]?></li>
-        <li><?php echo $bestsellers[1]?></li>
-        <li><?php echo $bestsellers[2]?></li>
-    </ul>
-
+    <?php foreach ($nutrition as $label => $amount): ?>
+        <p><?= $label ?>: <?= $amount ?></p>
+    <?php endforeach; ?>
+    <h2>Bestsellers</h2>
+    <ol>
+        <?php foreach ($bestsellers as $candy): ?>
+            <li><?= $candy ?></li>
+        <?php endforeach; ?>
+    </ol>
     <h2>Offers</h2>
-    <p><?php echo $offers[0]['name']; ?> - $<?php echo $offers[0]['price']; ?></p>
-    <p><?php echo $offers[1]['name']; ?> - $<?php echo $offers[1]['price']; ?></p>
-    <p><?php echo $offers[2]['name']; ?> - $<?php echo $offers[2]['price']; ?></p>
-</body>
-</html>
+    <table>
+        <tr><th>Candy</th><th>Price</th><th>Stock</th><th>Availability</th></tr>
+        <?php foreach ($offers as $offer): ?>
+            <?php
+            $total_stock += $offer['stock'];
+            if ($offer['stock'] <= 0) {
+                $status = 'Sold out';
+            } elseif ($offer['stock'] < 100) {
+                $status = 'Limited stock';
+            } else {
+                $status = 'In stock';
+            }
+            ?>
+            <tr><td><?= $offer['name'] ?></td><td>$<?= $offer['price'] ?></td><td><?= $offer['stock'] ?></td><td><?= $status ?></td></tr>
+        <?php endforeach; ?>
+    </table>
+    <p>Total offer stock: <?= $total_stock ?> packs</p>
+<?php include 'includes/footer.php'; ?>
